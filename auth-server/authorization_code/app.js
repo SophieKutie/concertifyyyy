@@ -49,7 +49,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-read-playback-state';
+  var scope = 'user-read-private user-read-email user-read-playback-state user-top-read';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -145,6 +145,28 @@ app.get('/refresh_token', function(req, res) {
     }
   });
 });
+
+
+
+
+
+
+app.get('/top/artists', function(req, res) {
+  //to abstract token; retrieving token from string as object
+    let parsed = queryString.parse(window.location.search);
+    let access_token = parsed.access_token;
+  
+    fetch('https://api.spotify.com/v1/me', {
+      headers: {'Authorisation': 'Bearer ' + access_token}
+    }).then(response => response.json())
+    .then(data => console.log(data))
+  });
+  
+
+
+
+
+
 
 console.log('Listening on 8888');
 app.listen(8888);

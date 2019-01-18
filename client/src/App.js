@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import './App.css';
 import Spotify from 'spotify-web-api-js';
+import queryString from 'query-string';
+
 
 const spotifyWebApi = new Spotify();
 
@@ -12,9 +14,18 @@ class App extends Component {
   const token = params.access_token;
   this.state = {
     loggedIn: token ? true : false,
-    nowPlaying: { name: '', 
-    image: '' 
-  }
+    nowPlaying: { 
+        name: '', 
+        image: '' } //,
+        // serverData: {},
+        // filterString: '' 
+    //topArtists: {
+     // name: '',
+      //image: ''
+
+    
+  
+  
   }
 
   
@@ -48,6 +59,21 @@ class App extends Component {
       })
   }
 
+getTopArtists(){
+  spotifyWebApi.getMyTopArtists()
+    .then((response) => {
+      this.setState({
+        topArtists: {
+          name: response.item.name,
+          image: response.item.images[0].url
+        }
+      });
+    })
+}
+
+
+
+
   render() {
     return (
       <div className="App">
@@ -60,9 +86,22 @@ class App extends Component {
         <div>
           <img src={this.state.nowPlaying.image} style={{ width: 100 }}/>
         </div>
-       
-          <button onClick={() => this.getNowPlaying()}>
+
+        <button onClick={() => this.getNowPlaying()}>
             Check what's Now Playing
+          </button>
+
+
+        {/* <div>
+          You've been listening to: { this.state.topArtists.name }
+        </div>
+
+        <div>
+          <img src={this.state.topArtists.image} style={{ width: 200 }}/>
+        </div>
+          */}
+          <button onClick={() => this.getTopArtists()}>
+            Check who's concert you want to see!
           </button>
         
       </div>
