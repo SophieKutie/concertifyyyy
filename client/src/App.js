@@ -16,13 +16,13 @@ class App extends Component {
     loggedIn: token ? true : false,
     nowPlaying: { 
         name: '', 
-        image: '' } //,
+        image: '' }, //,
         // serverData: {},
         // filterString: '' 
-    //topArtists: {
-     // name: '',
-      //image: ''
-
+    topArtists: {
+     name: '',
+    image: ''
+    }
     
   
   
@@ -92,15 +92,14 @@ getTopArtists(){
           </button>
 
 
-        {/* <div>
+        <div>
           You've been listening to: { this.state.topArtists.name }
         </div>
 
         <div>
-          <img src={this.state.topArtists.image} style={{ width: 200 }}/>
+          <img src={this.state.topArtists.image} style={{ width: 100 }}/>
         </div>
-          */}
-          <button onClick={() => this.getTopArtists()}>
+                   <button onClick={() => this.getTopArtists()}>
             Check who's concert you want to see!
           </button>
         
