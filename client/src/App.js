@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import './App.css';
+import Show from "./Show"
+import showsData from "./showsData"
 import Spotify from 'spotify-web-api-js';
 import queryString from 'query-string';
 
@@ -149,6 +151,10 @@ class App extends Component {
 
 
   render() {
+
+//const showComponents = showsData.map(item => <Show Key = {item.id} show={item}/>)  //for mapping hypothetical json array
+
+
     return (
       <div className="App">
       <a href='http://localhost:8888'> 
@@ -166,7 +172,7 @@ class App extends Component {
           </button> 
 
         <div>
-          Top Artist: { this.state.topArtist.name }
+          You've been listening to: { this.state.topArtist.name }
         </div> 
 
         <div>
@@ -175,13 +181,13 @@ class App extends Component {
 
 
         <button onClick={() => this.getTopArtist()}>
-            Top Artist!
+            Check Top Artist!
           </button>
         
 
 
 
-          <div>
+        {/* <div> // only testing getSavedTrack API, turned out forbidden
           Saved Track: { this.state.savedTrack.name }
         </div> 
 
@@ -192,7 +198,17 @@ class App extends Component {
 
         <button onClick={() => this.getSavedTrack()}>
             U saved this!
-          </button>
+          </button> */}
+          
+          {/* <div>   //for mapping images from showsData hypothetical json
+          {showComponents}
+          </div> */}
+          
+
+          <Show imgUrl = "https://shoobs.com/media/W1siZiIsIjIwMTgvMDcvMjAvMTEvNTkvMzgvMjM0L0RBVklET19zb2NpYWxzX0lOU1RBX21pbi5KUEciXSxbInAiLCJ0aHVtYiIsIjk2MHg5NjAiXSxbInAiLCJvcHRpbSJdXQ/DAVIDO_socials_INSTA-min.JPG?sha=ab2809d4"/>    
+          <Show imgUrl = "https://i.ytimg.com/vi/YRhSh7sN3FQ/hqdefault.jpg"/>  
+          <Show imgUrl = "https://i.ytimg.com/vi/amWQHuhyW4Y/hqdefault.jpg"/>  
+          <Show imgUrl = "https://live-timely-fzn9b7gebi.time.ly/wp-content/uploads/2018/10/022219-ellamai.jpg"/>  
       </div>
     );
   }
