@@ -1,30 +1,30 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * 
- * 
- * 
- * For more information, read
- * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
- */
+// /**
+//  * This is an example of a basic node.js script that performs
+//  * the Authorization Code oAuth2 flow to authenticate against
+//  * the Spotify Accounts.
+//  *
+//  * 
+//  * 
+//  * 
+//  * For more information, read
+//  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
+//  */
 
-var express = require('express'); // Express web server framework
+ var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
-var cors = require('cors');
-var querystring = require('querystring');
+ var cors = require('cors');
+ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
 var client_id = 'dc6f888919574fcc9fee6c8c5c2818e6'; // Your client id
 var client_secret = 'bdb690a444e54100be265a478a9055f8'; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
+// /**
+//  * Generates a random string containing numbers and letters
+//  * @param  {number} length The length of the string
+//  * @return {string} The generated string
+//  */
 var generateRandomString = function(length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -37,7 +37,12 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 
-var app = express();
+var app = express(); //to define app as node.js does not provide, coming from express module
+
+
+const fetch = require("node-fetch");   //require fetch external module
+
+
 
 app.use(express.static(__dirname + '/public'))
    .use(cors())
@@ -49,7 +54,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-read-playback-state user-top-read';
+  var scope = 'user-read-private user-read-email user-read-playback-state user-top-read user-library-read';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -59,6 +64,7 @@ app.get('/login', function(req, res) {
       state: state
     }));
 });
+
 
 app.get('/callback', function(req, res) {
 
@@ -101,9 +107,27 @@ app.get('/callback', function(req, res) {
           json: true
         };
 
+
+
+        
+      
+      
+
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          console.log(body);
+          console.log(body)//; works with token error from undefined query string probem
+          //let parsed = queryString.parse(window.location.search);
+          //let access_token = parsed.access_token;
+        //   fetch(`https://api.spotify.com/v1/me/top/tracks`, 
+        //   {
+        //     method: "GET",
+        //     headers: {'Authorisation': 'Bearer ' + access_token}})
+        //     .then(function (response) {
+        //       return response.json()
+        //     })
+        //     .then(function (data) {
+        //       console.log('the data', data)
+        //     })
         });
 
         // we can also pass the token to the browser to make requests from there
@@ -121,6 +145,23 @@ app.get('/callback', function(req, res) {
     });
   }
 });
+
+//app.get('/tracks', function(req, res ){
+// var querystring = require('querystring');
+// let parsed = queryString.parse(window.location.search);
+// let access_token = parsed.access_token;
+
+// fetch(`https://api.spotify.com/v1/me/top/tracks`, 
+// {
+//   method: "GET",
+//   headers: {'Authorisation': 'Bearer ' + access_token}})
+//   .then(function (response) {
+//     return response.json()
+//   })
+//   .then(function (data) {
+//     console.log('the data', data)
+//   })
+//});
 
 app.get('/refresh_token', function(req, res) {
 
@@ -151,22 +192,39 @@ app.get('/refresh_token', function(req, res) {
 
 
 
-app.get('/top/artists', function(req, res) {
-  //to abstract token; retrieving token from string as object
-    let parsed = queryString.parse(window.location.search);
-    let access_token = parsed.access_token;
+
+
+// app.get('/tracks', function(req, res) {
+//   //to abstract token; retrieving token from string as object
+//     let parsed = queryString.parse(window.location.search);
+//     let access_token = parsed.access_token;
   
-    fetch('https://api.spotify.com/v1/me', {
-      headers: {'Authorisation': 'Bearer ' + access_token}
-    }).then(response => response.json())
-    .then(data => console.log(data))
-  });
+//     fetch('https://api.spotify.com/v1/me/top/tracks', {
+//       headers: {'Authorisation': 'Bearer ' + access_token}
+//     }).then(function (response) {
+//     return response.json()
+//   })
+//   .then(function (body) {
+//     console.log('the data', body)
+//   })
+// });
+
+
+
+// const fetch = require("node-fetch");   //require fetch external module
+
+// let parsed = queryString.parse(window.location.search);
+// let access_token = parsed.access_token;
+// fetch(`https://api.spotify.com/v1/me/top/tracks`, 
+// {headers: {'Authorisation': 'Bearer ' + access_token}})
+//   .then(function (response) {
+//     return response.json()
+//   })
+//   .then(function (data) {
+//     console.log('the data', data)
+//   })
+
   
 
-
-
-
-
-
-console.log('Listening on 8888');
-app.listen(8888);
+ console.log('Listening on 8888');
+ app.listen(8888);
