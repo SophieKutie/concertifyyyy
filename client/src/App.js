@@ -107,7 +107,7 @@ class App extends Component {
             this.setState({
                  topArtist: { 
                     name: response.name, 
-                     image: response.images           
+                     image: response.images[0].url          
                      }
            });
            console.log(this.state.topArtist)
@@ -120,7 +120,7 @@ class App extends Component {
           this.setState({
             topTrack: { 
                name: response.items.name, 
-                image: response.items.images[0].url
+                
         }
       });
     })
@@ -187,7 +187,7 @@ class App extends Component {
 
 
 
-        {/* <div> // only testing getSavedTrack API, turned out forbidden
+         <div>     
           Saved Track: { this.state.savedTrack.name }
         </div> 
 
@@ -198,7 +198,7 @@ class App extends Component {
 
         <button onClick={() => this.getSavedTrack()}>
             U saved this!
-          </button> */}
+          </button> 
           
           {/* <div>   //for mapping images from showsData hypothetical json
           {showComponents}
