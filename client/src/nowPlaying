@@ -1,0 +1,9 @@
+import React from "react"
+
+function nowPlaying() {
+    return (
+        
+    )
+}
+
+export default nowPlaying 

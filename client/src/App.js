@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
+
 import './App.css';
 import Show from "./Show"
 import showsData from "./showsData"
 import Spotify from 'spotify-web-api-js';
 import queryString from 'query-string';
+import nowPlaying from "./nowPlaying"
 
 
 
@@ -21,13 +23,7 @@ class App extends Component {
     nowPlaying: { 
         name: '', 
         image: '' },  
-    topArtist: {
-     name: '',
-    image: ''},
-    savedTrack: { 
-      name: '',
-      image: ''
-    }
+    topArtistNames : [{ name: ''}]
   }
   
   if (token) {
@@ -35,25 +31,6 @@ class App extends Component {
   }
 
 }
-// componentDidMount() {
-//   let parsed = queryString.parse(window.location.search);
-//   let accessToken = parsed.access_token;
-//   if (!accessToken)
-//     return;
-//     fetch(`https://api.spotify.com/v1/me/top/tracks`, 
-//     {
-//       method: "GET",
-//       headers: {'Authorisation': 'Bearer ' + accessToken}})
-//       .then(function (response) {
-//         return response.json()
-//       })
-//       .then(function (data) {
-//         console.log('the data', data)
-//       })
-
-    
-
-//   }
 
 
 
@@ -71,19 +48,6 @@ class App extends Component {
 
   getNowPlaying(){
     spotifyWebApi.getMyCurrentPlaybackState()
-    // .then(function (response) {
-    //          return response.json()
-    //        })
-    //        .then(function (data) {
-    //          console.log('the data', data)
-    //        })
-    //   };
-
-
-
-
-
-
       .then((response) => {
         this.setState({
           nowPlaying: { 
@@ -95,72 +59,77 @@ class App extends Component {
       })
   }
 
-  getTopArtist(){spotifyWebApi.getMyTopArtists({
-   limit : 1}
-  ).then
-  // }).then(function(data){
-  //      console.log(data);
-  //    }, function(err){
-  //      console.log(err);
-  //    });}
-     ((response) => {
-            this.setState({
-                 topArtist: { 
-                    name: response.name, 
-                     image: response.images[0].url          
-                     }
-           });
-           console.log(this.state.topArtist)
-         })
-      }
-      
-      getSavedTrack(){spotifyWebApi.getMySavedTracks({
-        limit : 1, offset : 1})
-        .then((response) => {
-          this.setState({
-            topTrack: { 
-               name: response.items.name, 
-                
-        }
-      });
-    })
- }
-  
-  
-  
-// getTopArtist(){
-//   let parsed = queryString.parse(window.location.search);
-//   let accessToken = parsed.access_token;
-  
-//   if (!accessToken)
-//     return;
-//     fetch(`https://api.spotify.com/v1/me/top/artists?limit=1`, 
-//     {
-//       method: "GET",
-//       headers: {'Authorisation': 'Bearer ' + accessToken}})
-//       .then((response) => {
-//         this.setState({
-//           topArtist: { 
-//               name: response.item.name, 
-//               image: response.item.images[0].url
-//       }
-//     });
-//   })
-// }
-  
+  // getTopArtist(){spotifyWebApi.getMyTopArtists({
+  //  limit : 1}
+  // ).then(response => response.json())
+  //    .then(data => //console.log(data))
+  //   {this.setState({
+  //                 topArtist: data.items.name }) 
+  //   //                 name: response.items.name,   
+  //   //                  }
+  //   //        });
+  //   //        console.log(this.state.getTopArtist)
+  //        })
+  //   }
+    
+    doFetch() {
+      let uri = "https://api.spotify.com/v1/me/top/artists?limit=20"
+      let h = new Headers();
+      h.append('Accept', 'application/json');
+      h.append('Content-Type', 'application/json')
+      //let encoded = window.btoa('sophiekutie:concertify');
+      let access_token = 'BQBeVTYpEgErjgQozUgb1VI8QNd7l3BJgksJd5tO8K3hBao-gjXPHfcgZHEkeCrEpjTUgnQYKmbqn9KWh3s6hJNIhB_LJpSXmS4IMg4NdE4niwv_KZegVMiPk3KhQkkhkzrA0gw-S-pPGMXfLb8NiqP4xs4me1aANq_q7pRlVhxYsAK4eQZaggSjhF54K2lrQ3k-p_MB7SkScsogRd3MKJ9yGh_DDX5bnG1vw6kgbZ2Uul4V'
+      let auth = 'Bearer ' + access_token;
+      h.append('Authorization', auth );
 
+      let req = new Request(uri, {
+        method: 'GET',
+        headers: h,
+        
+      });
+      
+      fetch(req)
+      .then((response) => {
+        if(response.ok){
+          return response.json();
+        }else{
+          throw new Error('Bad HTTP stuff');
+        }
+      }).then ((jsonData) =>{
+       //console.log(jsonData)
+       //{ // const {names} = jsonData.items.name
+        //console.log(names[0])
+        var i; 
+        for(i = 0; i <20; i++) 
+        {
+          console.log(jsonData.items[i].name)
+        }
+        //  this.setState({
+        //   topArtistNames :  [{
+
+        //           name: jsonData[0].items[5].name }]
+               
+        //   }) 
+        //}
+      
+        } 
+      )
+    }
+
+    componentDidMount() {
+      console.log(this.state.topArtistNames)
+    }
 
   render() {
-
-//const showComponents = showsData.map(item => <Show Key = {item.id} show={item}/>)  //for mapping hypothetical json array
-
-
+   let topArtistNames = [this.state.topArtistNames.name]
+   //let topArtist = []
+   let topArtistList = topArtistNames.map(name => <li>{name} </li>)
     return (
       <div className="App">
       <a href='http://localhost:8888'> 
       <button>Login With Spotify</button>
       </a>
-         <div>
+         {/* <div>
           Now Playing: { this.state.nowPlaying.name }
         </div> 
         <div>
@@ -169,52 +138,24 @@ class App extends Component {
 
         <button onClick={() => this.getNowPlaying()}>
             Check what's Now Playing
-          </button> 
+          </button>  */}
 
-        <div>
-          You've been listening to: { this.state.topArtist.name }
-        </div> 
-
-        <div>
-          <img src={this.state.topArtist.image} style={{ width: 100 }}/>
+         <div>
+           <h1>Top Artists List :  </h1> 
+           <ul> {topArtistList}</ul> 
+           
         </div>
 
-
-        <button onClick={() => this.getTopArtist()}>
+        <button onClick={() => this.doFetch()}>
             Check Top Artist!
           </button>
         
-
-
-
-         <div>     
-          Saved Track: { this.state.savedTrack.name }
-        </div> 
-
-        <div>
-          <img src={this.state.savedTrack.image} style={{ width: 100 }}/>
-        </div>
-
-
-        <button onClick={() => this.getSavedTrack()}>
-            U saved this!
-          </button> 
-          
-          {/* <div>   //for mapping images from showsData hypothetical json
-          {showComponents}
-          </div> */}
-          
-
-          <Show imgUrl = "https://shoobs.com/media/W1siZiIsIjIwMTgvMDcvMjAvMTEvNTkvMzgvMjM0L0RBVklET19zb2NpYWxzX0lOU1RBX21pbi5KUEciXSxbInAiLCJ0aHVtYiIsIjk2MHg5NjAiXSxbInAiLCJvcHRpbSJdXQ/DAVIDO_socials_INSTA-min.JPG?sha=ab2809d4"/>    
-          <Show imgUrl = "https://i.ytimg.com/vi/YRhSh7sN3FQ/hqdefault.jpg"/>  
-          <Show imgUrl = "https://i.ytimg.com/vi/amWQHuhyW4Y/hqdefault.jpg"/>  
-          <Show imgUrl = "https://live-timely-fzn9b7gebi.time.ly/wp-content/uploads/2018/10/022219-ellamai.jpg"/>  
       </div>
     );
   }
 }
 
-console.log('Listening on 3000');
+//console.log('Listening on 3000');
 export default App;
 
 

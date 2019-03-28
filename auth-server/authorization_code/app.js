@@ -11,14 +11,14 @@
 //  */
 
  var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
+ var request = require('request'); // "Request" library
  var cors = require('cors');
  var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
+ var cookieParser = require('cookie-parser');
 
-var client_id = 'dc6f888919574fcc9fee6c8c5c2818e6'; // Your client id
-var client_secret = 'bdb690a444e54100be265a478a9055f8'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+ var client_id = 'dc6f888919574fcc9fee6c8c5c2818e6'; // Your client id
+ var client_secret = 'bdb690a444e54100be265a478a9055f8'; // Your secret
+ var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 // /**
 //  * Generates a random string containing numbers and letters
@@ -102,16 +102,12 @@ app.get('/callback', function(req, res) {
             refresh_token = body.refresh_token;
 
         var options = {
-          url: 'https://api.spotify.com/v1/me',
+          url: 'https://api.spotify.com/v1/me', 
           headers: { 'Authorization': 'Bearer ' + access_token },
           json: true
         };
 
-
-
         
-      
-      
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
