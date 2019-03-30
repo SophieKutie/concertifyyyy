@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 
 import './App.css';
-import Show from "./Show"
-import showsData from "./showsData"
+//import Show from "./Show"
+//import showsData from "./showsData"
 import Spotify from 'spotify-web-api-js';
-import queryString from 'query-string';
-import nowPlaying from "./nowPlaying"
+//import queryString from 'query-string';
+//import ErrorBoundary from './ErrorBoundary';
+
 
 
 
@@ -18,12 +19,14 @@ class App extends Component {
   super();
   const params = this.getHashParams();
   const token = params.access_token;
+ 
+  
   this.state = {
     loggedIn: token ? true : false,
-    nowPlaying: { 
-        name: '', 
-        image: '' },  
-    topArtistNames : [{ name: ''}]
+   //hasEvents: events ? true : false,
+    topArtistName : 
+                       [{ name: ''}],
+                        img: ''
   }
   
   if (token) {
@@ -46,39 +49,15 @@ class App extends Component {
     return hashParams;
   }
 
-  getNowPlaying(){
-    spotifyWebApi.getMyCurrentPlaybackState()
-      .then((response) => {
-        this.setState({
-          nowPlaying: { 
-              name: response.item.name, 
-              image: response.item.album.images[0].url
-            }
-        });
-        console.log(this.state.nowPlaying)
-      })
-  }
 
-  // getTopArtist(){spotifyWebApi.getMyTopArtists({
-  //  limit : 1}
-  // ).then(response => response.json())
-  //    .then(data => //console.log(data))
-  //   {this.setState({
-  //                 topArtist: data.items.name }) 
-  //   //                 name: response.items.name,   
-  //   //                  }
-  //   //        });
-  //   //        console.log(this.state.getTopArtist)
-  //        })
-  //   }
     
-    doFetch() {
+    getTopTwentyArtists() {
       let uri = "https://api.spotify.com/v1/me/top/artists?limit=20"
       let h = new Headers();
       h.append('Accept', 'application/json');
       h.append('Content-Type', 'application/json')
       //let encoded = window.btoa('sophiekutie:concertify');
-      let access_token = 'BQBeVTYpEgErjgQozUgb1VI8QNd7l3BJgksJd5tO8K3hBao-gjXPHfcgZHEkeCrEpjTUgnQYKmbqn9KWh3s6hJNIhB_LJpSXmS4IMg4NdE4niwv_KZegVMiPk3KhQkkhkzrA0gw-S-pPGMXfLb8NiqP4xs4me1aANq_q7pRlVhxYsAK4eQZaggSjhF54K2lrQ3k-p_MB7SkScsogRd3MKJ9yGh_DDX5bnG1vw6kgbZ2Uul4V'
+      let access_token = 'BQDt1csdI5ioncB6Cc2aMsovlDXW92Oj-e8HWswTlN0N5L-xLaoLdgLFOfaf2oWg3YroncLbB4VFCPSr34YFVhoH2cGPQmqyGYu553-ExSVcR8pT4_M0Oy8MqoS2B8kSzbB6QTuigdZEcpqhjAL_9fy97JqfRC_uwtoq-wB6Shzp7jaYf7DG47qb_cHiynSpCRmfCYIbvTHBqSA0z632Nq0xl8tBHM70mlg8OKviNEnrtXHP'
       let auth = 'Bearer ' + access_token;
       h.append('Authorization', auth );
 
@@ -96,66 +75,102 @@ class App extends Component {
           throw new Error('Bad HTTP stuff');
         }
       }).then ((jsonData) =>{
-       //console.log(jsonData)
-       //{ // const {names} = jsonData.items.name
-        //console.log(names[0])
-        var i; 
-        for(i = 0; i <20; i++) 
-        {
-          console.log(jsonData.items[i].name)
-        }
-        //  this.setState({
-        //   topArtistNames :  [{
-
-        //           name: jsonData[0].items[5].name }]
-               
-        //   }) 
-        //}
       
+        var i; 
+         for(i = 0; i <20; i++) 
+        {
+         
+          console.log(jsonData.items[i].name)
+          this.setState({
+           topArtistName:{
+            name: jsonData.items[i].name,
+            img: jsonData.items[i].images[1].url
+          }
+          });
+          setTimeout(i, 100);
+           
+
+        }
+       
         } 
       )
     }
+   
+ doSearch() {
 
-    componentDidMount() {
-      console.log(this.state.topArtistNames)
+  var artist = this.state.topArtistName.name;
+  var uri = 'http://api.songkick.com/api/3.0/search/artists.json?apikey=QCFZoZJso4HKBsfS&query=' + artist  +'&per_page=1'
+  
+
+  let re = new Request(uri, {
+    method: 'GET',
+  });
+
+  fetch(re)
+  .then((response) => {
+    if(response.ok){
+      return response.json();
+    }else{
+      throw new Error('Bad HTTP stuff');
     }
+  })
+  .then ((data) =>{
+
+console.log(data.resultsPage.results.artist[0].id)
+// data.resultsPage.results.artist.forEach(function(a){
+//   console.log(a.id);
+//})
+
+//may need this.state here for id to use for event query
+    })
+     }
 
   render() {
-   let topArtistNames = [this.state.topArtistNames.name]
-   //let topArtist = []
-   let topArtistList = topArtistNames.map(name => <li>{name} </li>)
+
     return (
       <div className="App">
       <a href='http://localhost:8888'> 
       <button>Login With Spotify</button>
       </a>
-         {/* <div>
-          Now Playing: { this.state.nowPlaying.name }
-        </div> 
-        <div>
-          <img src={this.state.nowPlaying.image} style={{ width: 100 }}/>
-        </div>
-
-        <button onClick={() => this.getNowPlaying()}>
-            Check what's Now Playing
-          </button>  */}
 
          <div>
-           <h1>Top Artists List :  </h1> 
-           <ul> {topArtistList}</ul> 
+           <h1>Concerts List :  </h1> 
+               <ul>
+                 {
+                  //  (this.state.topArtistName.name || []).map(item => (
+                  //  <li key={item}>{item}</li>
+                  //  ))
+                  this.state.topArtistName.name 
+                 }
+               </ul>
            
         </div>
 
-        <button onClick={() => this.doFetch()}>
+        <div>
+          <img src= {this.state.topArtistName.img} alt= " " style={{ height: 140}}/>
+          </div>
+
+        <button onClick={() => this.getTopTwentyArtists()}>
             Check Top Artist!
           </button>
-        
+
+          <div>
+          <p> </p>
+          </div>
+
+          <button onClick={() => this.doSearch()}>
+            Search Songkick!
+          </button>
+
+          
+          
+
+
       </div>
     );
   }
 }
 
-//console.log('Listening on 3000');
 export default App;
 
 

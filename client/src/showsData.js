@@ -21,4 +21,4 @@ const shows = [
     }
 ]
 
-export default shows
+export default shows;
