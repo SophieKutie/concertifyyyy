@@ -26,7 +26,8 @@ class App extends Component {
    //hasEvents: events ? true : false,
     topArtistName : 
                        [{ name: ''}],
-                        img: ''
+                        img: '',
+    topArtistEvent : [{event: ''}]
   }
   
   if (token) {
@@ -57,7 +58,7 @@ class App extends Component {
       h.append('Accept', 'application/json');
       h.append('Content-Type', 'application/json')
       //let encoded = window.btoa('sophiekutie:concertify');
-      let access_token = 'BQDt1csdI5ioncB6Cc2aMsovlDXW92Oj-e8HWswTlN0N5L-xLaoLdgLFOfaf2oWg3YroncLbB4VFCPSr34YFVhoH2cGPQmqyGYu553-ExSVcR8pT4_M0Oy8MqoS2B8kSzbB6QTuigdZEcpqhjAL_9fy97JqfRC_uwtoq-wB6Shzp7jaYf7DG47qb_cHiynSpCRmfCYIbvTHBqSA0z632Nq0xl8tBHM70mlg8OKviNEnrtXHP'
+      let access_token = 'BQARN1KbNEvINhdMLWboy0XoTIClypRSVlA9rCxNI4GGNCyp-5HKVySbp1qFLGxSWyTO8CPPWKUT15hfTZZRUgh4-1pA1iv_MdapLrAzrc1_LRhZJi57mGXuSveNWJIFpHoLZhbfbHCFmvp57RTsQNdGFt-vJ69j9JxHBVfNd5K29UF8vJ4zb8DcAyHJ1K-LoB7zAeaTBcSeWPkVypmu2RydVp0fmeKu7r-8abs4LuM5HsRm'
       let auth = 'Bearer ' + access_token;
       h.append('Authorization', auth );
 
@@ -77,7 +78,7 @@ class App extends Component {
       }).then ((jsonData) =>{
       
         var i; 
-         for(i = 0; i <20; i++) 
+         for(i = 0; i < 20; i++) 
         {
          
           console.log(jsonData.items[i].name)
@@ -96,10 +97,41 @@ class App extends Component {
       )
     }
    
- doSearch() {
+//  doSearch() {
 
+//   var artist = this.state.topArtistName.name;
+//   var uri = 'http://api.songkick.com/api/3.0/search/artists.json?apikey=QCFZoZJso4HKBsfS&query=' + artist  +'&per_page=1'
+  
+
+//   let re = new Request(uri, {
+//     method: 'GET',
+//   });
+
+//   fetch(re)
+//   .then((response) => {
+//     if(response.ok){
+//       return response.json();
+//     }else{
+//       throw new Error('Bad HTTP stuff');
+//     }
+//   })
+//   .then ((data) =>{
+//           console.log(data.resultsPage.results.artist[0].id)
+//           // data.resultsPage.results.artist.forEach(function(a){
+//           //   console.log(a.id);
+//           //})
+//           //may need this.state here for id to use for event query
+//           this.setState({
+//             topArtistId:{
+//               id: data.resultsPage.results.artist[0].id   
+//               }
+//               });
+//                  })
+// }
+
+getEvent() {
   var artist = this.state.topArtistName.name;
-  var uri = 'http://api.songkick.com/api/3.0/search/artists.json?apikey=QCFZoZJso4HKBsfS&query=' + artist  +'&per_page=1'
+  var uri = 'https://api.songkick.com/api/3.0/events.json?apikey=QCFZoZJso4HKBsfS&artist_name=' + artist  + '&per_page=1'
   
 
   let re = new Request(uri, {
@@ -114,16 +146,22 @@ class App extends Component {
       throw new Error('Bad HTTP stuff');
     }
   })
+
   .then ((data) =>{
+    console.log(data.resultsPage.results.event[0].displayName)
+    //data.resultsPage.results.artist.forEach(function(a){
+    //console.log(a.id);
+    //})
+    //may need this.state here for id to use for event query
+    this.setState({
+    topArtistEvent:{
+    event: data.resultsPage.results.event[0].displayName   
+    }
+    });
+            })
+}
 
-console.log(data.resultsPage.results.artist[0].id)
-// data.resultsPage.results.artist.forEach(function(a){
-//   console.log(a.id);
-//})
 
-//may need this.state here for id to use for event query
-    })
-     }
 
   render() {
 
@@ -155,11 +193,11 @@ console.log(data.resultsPage.results.artist[0].id)
           </button>
 
           <div>
-          <p> </p>
+          <p> {this.state.topArtistEvent.event} </p>
           </div>
 
-          <button onClick={() => this.doSearch()}>
-            Search Songkick!
+          <button onClick={() => this.getEvent()}>
+            Find Event!
           </button>
 
           
