@@ -27,7 +27,8 @@ class App extends Component {
     topArtistName : 
                        [{ name: ''}],
                         img: '',
-    topArtistEvent : [{event: ''}]
+    topArtistEvent : [{event: ''}],
+                       city: ''
   }
   
   if (token) {
@@ -58,7 +59,7 @@ class App extends Component {
       h.append('Accept', 'application/json');
       h.append('Content-Type', 'application/json')
       //let encoded = window.btoa('sophiekutie:concertify');
-      let access_token = 'BQARN1KbNEvINhdMLWboy0XoTIClypRSVlA9rCxNI4GGNCyp-5HKVySbp1qFLGxSWyTO8CPPWKUT15hfTZZRUgh4-1pA1iv_MdapLrAzrc1_LRhZJi57mGXuSveNWJIFpHoLZhbfbHCFmvp57RTsQNdGFt-vJ69j9JxHBVfNd5K29UF8vJ4zb8DcAyHJ1K-LoB7zAeaTBcSeWPkVypmu2RydVp0fmeKu7r-8abs4LuM5HsRm'
+      let access_token = 'BQB_2gbsYimx0rGknMFOmlgUzLLelhambasRFDKpHCMDeQCWx1hgud3wNFKec4SOijcL54Gi1gW4XDig6CefIFBhlBenBxGBamfNUQsfHHGg5KBTHGrzEa4IDqBhpoId_9oFanuiVbdPAbi_-0nYhYl77bjPPXZD02WQrI0B5RqsN5lA0CgRkEi9iqtwAu_MAiVYx23-XCQc_f5pe8w6R_GJEuSOvWuhJuFtenqwB_RkAMKS'
       let auth = 'Bearer ' + access_token;
       h.append('Authorization', auth );
 
@@ -149,13 +150,16 @@ getEvent() {
 
   .then ((data) =>{
     console.log(data.resultsPage.results.event[0].displayName)
+    console.log(data.resultsPage.results.event[0].location)
+
     //data.resultsPage.results.artist.forEach(function(a){
     //console.log(a.id);
     //})
     //may need this.state here for id to use for event query
     this.setState({
     topArtistEvent:{
-    event: data.resultsPage.results.event[0].displayName   
+    event: data.resultsPage.results.event[0].displayName,
+    city:  data.resultsPage.results.event[0].location.city
     }
     });
             })
@@ -194,6 +198,10 @@ getEvent() {
 
           <div>
           <p> {this.state.topArtistEvent.event} </p>
+          </div>
+
+          <div>
+          <p> {this.state.topArtistEvent.city} </p>
           </div>
 
           <button onClick={() => this.getEvent()}>
