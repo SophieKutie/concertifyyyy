@@ -45,3 +45,37 @@
 
 
 //SOME FOR LOOP
+
+
+
+//  doSearch() {
+
+//   var artist = this.state.topArtistName.name;
+//   var uri = 'http://api.songkick.com/api/3.0/search/artists.json?apikey=QCFZoZJso4HKBsfS&query=' + artist  +'&per_page=1'
+  
+
+//   let re = new Request(uri, {
+//     method: 'GET',
+//   });
+
+//   fetch(re)
+//   .then((response) => {
+//     if(response.ok){
+//       return response.json();
+//     }else{
+//       throw new Error('Bad HTTP stuff');
+//     }
+//   })
+//   .then ((data) =>{
+//           console.log(data.resultsPage.results.artist[0].id)
+//           // data.resultsPage.results.artist.forEach(function(a){
+//           //   console.log(a.id);
+//           //})
+//           //may need this.state here for id to use for event query
+//           this.setState({
+//             topArtistId:{
+//               id: data.resultsPage.results.artist[0].id   
+//               }
+//               });
+//                  })
+// }
