@@ -2,25 +2,41 @@ import React, {Component} from "react"
 
 // class Show extends Component {
  
-const Show = (props) => {
+function Show(props) {
     return (
-        <div>
-            
-            <li>{this.state.topArtistName.name}</li>
-             {/* {props.children} */}
-        {/* <ul>
-        <img src= {this.state.topArtistName.img} alt= " " style={{ height: 140}}/>
-        </ul> */}
-    
+        <div style={{display: 'table',
+        width: '10px',
+        height:'10px',
+        float: 'left',
+        padding: '45px',
+        }}>
+        
+        <img src={props.item.imgUrl}/>
         </div>
     )
-
+    
 }
+
 
 export default Show
 
 
-
+// class Show extends Component {
+//   render() {
+//     let show = this.state.topArtistName.img
+//     return (
+//       <div style={{ display: 'inline-block', width: "25%"}}>
+//         <img src= {show} alt= " " style={{ height: 140}}/>
+       
+//         <ul>
+//           { show.map(item => 
+//             <li>{item.img}</li>
+//           )}
+//         </ul>
+//       </div>
+//     );
+//   }
+// }
 
 
 

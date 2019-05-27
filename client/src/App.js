@@ -17,7 +17,7 @@ class App extends Component {
  
   
   this.state = {
-  //  loggedIn: token ? true : false,
+  loggedIn: token ? true : false,
    //hasEvents: events ? true : false,
     topArtistName : 
                        [
@@ -61,29 +61,61 @@ class App extends Component {
 
                         { index: 20, id: '', name: '', img: ''},
                               
-                      ]                    
+                      ] ,                  
     // test: [],
-    // topArtistEvent : [{event: ''}],
-    //                    city: ''
+    topArtistEvent : 
+      {index: 1, event: '',
+                       city: ''},
+    
+    //[
+      //{index: 1, event: '', city: '' },
+      // {index: 2, event: '', city: '' },
+      // {index: 3, event: '', city: '' },
+      // {index: 4, event: '', city: '' },
+      // {index: 5, event: '', city: '' },
+      // {index: 6, event: '', city: '' },
+      // {index: 7, event: '', city: '' },
+      // {index: 8, event: '', city: '' },
+      // {index: 9, event: '', city: '' },
+      // {index: 10, event: '', city: '' },
+      // {index: 11, event: '', city: '' },
+      // {index: 12, event: '', city: '' },
+      // {index: 13, event: '', city: '' },
+      // {index: 14, event: '', city: '' },
+      // {index: 15, event: '', city: '' },
+      // {index: 16, event: '', city: '' },
+      // {index: 17, event: '', city: '' },
+      // {index: 18, event: '', city: '' },
+      // {index: 19, event: '', city: '' },
+      // {index: 20, event: '', city: '' },
+  //],
+  venue: { directions: ''}
+                       
   };
  
   for (var key in this.state) {
     console.log(key)
   }
-  var thisstateArray = this.state[key];
+  // var thisstateArray = this.state[key];
 
-  for (var i in thisstateArray) {
-  console.log(thisstateArray[i]); 
-  }
+  // for (var i in thisstateArray) {
+  // console.log(thisstateArray[i]); 
+  // }
   
   // var item = thisstateArray[i];
   //  for (var i in item) {
-  //console.log(item[this.state.topArtistName.name]);}
-  //for (var i in this.state.topArtistName) {
-  //}
+  // console.log(item[this.state.topArtistName.name]);}
+  // for (var i in this.state.topArtistName) {
+  // }
   // console.log(Object.keys(this.state.topArtistName));
-  // this.getTopTwentyArtists = this.getTopTwentyArtists.bind(this);
+
+
+
   
+  
+  this.getEvent = this.getEvent.bind(this);
+  this.getDirections = this.getDirections.bind(this);
+
   if (token) {
     spotifyWebApi.setAccessToken(token);
   }
@@ -101,15 +133,20 @@ class App extends Component {
     return hashParams;
   }
 
-
   componentDidMount(){
-  //getTopTwentyArtists() {
+  // load the top twenty artists retrieved from Spotify API call when the app component loads
+    this.getTopTwentyArtists();   
+   // getEvent(); 
+  }
+
+  
+  getTopTwentyArtists() {
       let uri = "https://api.spotify.com/v1/me/top/artists?limit=20"
       let h = new Headers();
       h.append('Accept', 'application/json');
-      h.append('Content-Type', 'application/json')
+      h.append('Content-Type', 'application/json');
       //let encoded = window.btoa('sophiekutie:concertify');
-      let access_token = 'BQAxmOXurAiCJTpEYQgaynY1_GbH2Fe023l2MYitLkvs77CjOnuhi7iTVCEIm_6qmCewbiAP5aMZbvwOWDEYPUorJnVTyEJnnsJeWuIWpGhIxo6n42iRslJTpcnXJDddwdZidlnxR0xW6TxgkTFfm3r2xWQtG_Y7sPc7m9kSinCbMcEvlX-9mXrLJRVmRkJNVWSGH3EhILLTxXTCW29RiILABrZnMTsDIlr-GSBqK0L86LZ6'
+      let access_token = 'BQDlZqH2XwtljRE8VlNxiPcDiOrfuCJALMd8wTAnDR5aOLf7PfhDXJ-ROPzOgliKKyAA0-96LccsOyYFPYFWeb2yijNpbZufWLgH5RhDOmNpVIi172SxQu_kIXSW6sfHRLp3s1-e1-8v6NZkszCtEYKTZw9b_Q'      
       let auth = 'Bearer ' + access_token;
       h.append('Authorization', auth );
 
@@ -118,7 +155,7 @@ class App extends Component {
         headers: h,
       });
       
-      let concerts = fetch(req)
+      const artistsToGetConcertsFor = fetch(req)
       .then((response) => {
         if(response.ok){
           return response.json();
@@ -129,114 +166,183 @@ class App extends Component {
     
       var i;
       for( i = 1; i < Object.keys(this.state.topArtistName).length; i++) {
-        { this.setState({
+        
+         this.setState({
            topArtistName: jsonData.items.map(item => {
               
              return {
             id: item.id,
             name: item.name,
             img: item.images[1].url
-          }
-                  
+            }          
+         })
         })
-        })
-          console.log(this.state.topArtistName); //log the state
-        }}})
-       } 
+       }  
+       console.log(this.state.topArtistName); //log the state
+      })
+      } 
        
-
 getEvent() {
-   // var artist = this.state.topArtistName.name;
+      for (var key in this.state.topArtistName)    // for all the keys i.e . index, id, name, img in topArtistName from positions 0 to 19,
+      var thisStateTopArray = this.state.topArtistName[19];  // fill the array with the actual value of the keys 
+      for (var property in thisStateTopArray)  // for all the properties in the array; log the value of the names
+      console.log(thisStateTopArray.name)  //log the value of the names and pass this value to the uri string below
+      var uri = 'https://api.songkick.com/api/3.0/events.json?apikey=QCFZoZJso4HKBsfS&artist_name=' + thisStateTopArray.name   + '&per_page=1'
+     
+     let re = new Request(uri, {
+       method: 'GET',
+     });
+   
+     fetch(re)
+     .then((response) => {
+       if(response.ok){
+         return response.json();
+       }else{
+        
+         throw new Error('Bad HTTP stuff');
+       }
+     })
+   
+     .then ((data) =>{
+       //console.log(data.resultsPage.results.event[0].displayName + ' Venue: ' + data.resultsPage.results.event[0].location.city)
+        {
+       this.setState({
+       topArtistEvent:{
+       event: data.resultsPage.results.event[0].displayName,
+       city:  data.resultsPage.results.event[0].location.city
+       }
+       });}console.log(this.state.topArtistEvent);
+       
+               })
+   }
+   
+   
+  getDirections() {
+   
+    var thisStateEvent = this.state.topArtistEvent[1];
+    for (var property in thisStateEvent) 
+    console.log(thisStateEvent.city + thisStateEvent.event)
+      var venue = thisStateEvent.city + thisStateEvent.event;
+      var uri = 'https://maps.googleapis.com/maps/api/directions/json?origin=Huddersfield&destination=' + 
+                 thisStateEvent.city + 
+                '&key=AIzaSyCcLX7jABYvI4YBQEQXzpGcNVlIYrGGvEQ&mode=transit&per_page=1'
+
+      let r = new Request(uri, {
+        method: 'GET',
+      });
     
-const artist = this.state.topArtistName.name.map(thing => <li key = {thing.id}> </li>) 
- 
-  var uri = 'https://api.songkick.com/api/3.0/events.json?apikey=QCFZoZJso4HKBsfS&artist_name=' + artist  + '&per_page=1'
+      fetch(r)
+      .then((response) => {
+        if(response.ok){
+          return response.json();
+        }else{
+          throw new Error('Bad HTTP stuff');
+        }
+      })
+    
+      .then ((data) =>{
+        this.setState({
+       venue:{
+        directions:  data.resultsPage.routes.legs.steps[3].html_instructions
+        }
+        });
+                })
+}
   
 
-  let re = new Request(uri, {
-    method: 'GET',
-  });
 
-  fetch(re)
-  .then((response) => {
-    if(response.ok){
-      return response.json();
-    }else{
-      throw new Error('Bad HTTP stuff');
-    }
-  })
+render() {
 
-  .then ((data) =>{
-    console.log(data.resultsPage.results.event[0].displayName)
-    console.log(data.resultsPage.results.event[0].location)
-
-    //data.resultsPage.results.artist.forEach(function(a){
-    //console.log(a.id);
-    //})
-    //may need this.state here for id to use for event query
-    this.setState({
-    topArtistEvent:{
-    event: data.resultsPage.results.event[0].displayName,
-    city:  data.resultsPage.results.event[0].location.city
-    }
-    });
-            })
-}
-
-  render() {
-    // let showsToRender = this.state.topArtistName || {}
-    const data = this.state.topArtistName;
-// const showList = data.map(name => {
-//   console.log(name)
-// })
     return (
-      <div className="App"> 
+      <div className="App">
+      <div className="App-header"> </div> 
+      
+      
       <a href='http://localhost:8888'> 
       <button>Login With Spotify</button>
-      </a>
+      </a> 
 
          <div>
-           <h3>Don't miss these events from 
+           <h2 style = {{color: "Purple"}}> Don't miss these events from 
              your favorite artists.  
-           </h3>     
+           </h2>     
         </div>
 
-        <div>
+        <div className="main">
+        {/* style={{display: "block", */}
+        {/* // width: '10px', */}
+        {/* // height:'10px', */}
+        {/* // float: 'centre', */}
+        {/* // padding: '45px', */}
+        {/* // }}> */}
+        
+        
         {this.state.topArtistName.map((thisstateArray) => { 
           let item = thisstateArray;
           return (
              <div key={item.index}> 
-             <h4> Name : {item.name} </h4>
-             <img src= {item.img} alt= " " style={{ height: 140}}/>
+             
+               <img src= {item.img} alt= " " style={{ height: 120}}/>
+             <h4 style = {{color: "purple"}}> {item.name} </h4>
+            
              </div>
              ); 
         })}
-       </div>
-    
        
-       {/* <div>
-         { data.map(name => {
-          console.log(name)
-         return (
-           <ul>
-             <li> Artist(s):
-             {this.state.topArtistName.name}
-               <img src= {this.state.topArtistName.name} alt= " " style={{ height: 140}}/></li> <li>{this.state.topArtistName.name}</li>
-           </ul>
-         )})}
-       </div>
-      */}
-       {/* <div>
-       {showsToRender.map((name, i) => 
-            <li name={name} index={i} />
-          )}
-       </div> */}
+    </div>
+       
+    {/* <div className="newspaper"> */}
+        {/* style={{display: "block", */}
+        {/* // width: '10px', */}
+        {/* // height:'10px', */}
+        {/* // float: 'centre', */}
+        {/* // padding: '45px', */}
+        {/* // }}> */}
+        
+        
+        {/* {this.state.topArtistEvent.map((thisstateArray) => {  */}
+          {/* let item = thisstateArray; */}
+          {/* return (
+             <div key={item.index}> 
+             
+              
+             <h4 style = {{color: "purple"}}> {item.event} </h4>
+             <h4 style = {{color: "purple"}}> {item.city} </h4>
+            
+             </div>
+             ); 
+        })}
+       
+    </div> */}
+    
+    <div>
+      <p>     </p>
+      <h1>    </h1>
+      <h1>    </h1>
+            <p style = {{color: "Brown"}}> Definitely attend this!    </p>
+            
+            {/* {this.state.topArtistName.name} */}
+            {this.state.topArtistEvent.event}
+           
+    </div>
+               {this.state.topArtistEvent.city}{/* {thisStateTopArray.name} */}
+              <p>    </p>
+
+        <button onClick={() => this.getEvent()}>
+            Concertify!
+         </button>
 
 
-        {/* <button onClick={() => this.getTopTwentyArtists()}>
-            Check Top Artist!
-         </button> */}
+         <div>
+            
+         <p>    </p>
+    </div>
 
+
+         <button onClick={() => this.getDirections()}>
+            Take me there!
+         </button>
+      <div className="footer"> </div>
       </div>
     );
   }

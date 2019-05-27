@@ -36,6 +36,24 @@
 
 
 
+    for (var key in this.state.topArtistName) 
+    var thisStateTopArray = this.state.topArtistName[1];
+  
+    // for (var property in thisStateTopArray) 
+    // console.log(thisStateTopArray.name)
+  //   var item = thisStateTopArray[i];
+  //  //  for (var i in item) {
+  //   console.log(item[i]);//}
+    //}
+    //var i = this.state.topArtistName[3]
+
+//for(var i = this.state.topArtistName[0]; i < Object.keys(this.state.topArtistName).length; i++) {
+
+
+
+
+
+
 
 
 
