@@ -7,6 +7,14 @@ import Spotify from 'spotify-web-api-js';
 //import queryString from 'query-string';
 
 
+/**********
+* Displays a list of concerts by
+* top 20 artists listened to by a Spotify user and 
+* direction to the event.
+*
+*
+*****/
+
 const spotifyWebApi = new Spotify();
 
 class App extends Component {
