@@ -67,28 +67,7 @@ class App extends Component {
       {index: 1, event: '',
                        city: ''},
     
-    //[
-      //{index: 1, event: '', city: '' },
-      // {index: 2, event: '', city: '' },
-      // {index: 3, event: '', city: '' },
-      // {index: 4, event: '', city: '' },
-      // {index: 5, event: '', city: '' },
-      // {index: 6, event: '', city: '' },
-      // {index: 7, event: '', city: '' },
-      // {index: 8, event: '', city: '' },
-      // {index: 9, event: '', city: '' },
-      // {index: 10, event: '', city: '' },
-      // {index: 11, event: '', city: '' },
-      // {index: 12, event: '', city: '' },
-      // {index: 13, event: '', city: '' },
-      // {index: 14, event: '', city: '' },
-      // {index: 15, event: '', city: '' },
-      // {index: 16, event: '', city: '' },
-      // {index: 17, event: '', city: '' },
-      // {index: 18, event: '', city: '' },
-      // {index: 19, event: '', city: '' },
-      // {index: 20, event: '', city: '' },
-  //],
+  
   venue: { directions: ''}
                        
   };
@@ -146,7 +125,7 @@ class App extends Component {
       h.append('Accept', 'application/json');
       h.append('Content-Type', 'application/json');
       //let encoded = window.btoa('sophiekutie:concertify');
-      let access_token = 'BQDlZqH2XwtljRE8VlNxiPcDiOrfuCJALMd8wTAnDR5aOLf7PfhDXJ-ROPzOgliKKyAA0-96LccsOyYFPYFWeb2yijNpbZufWLgH5RhDOmNpVIi172SxQu_kIXSW6sfHRLp3s1-e1-8v6NZkszCtEYKTZw9b_Q'      
+      let access_token = '*****************************************************************************'      
       let auth = 'Bearer ' + access_token;
       h.append('Authorization', auth );
 
@@ -187,7 +166,7 @@ getEvent() {
       var thisStateTopArray = this.state.topArtistName[19];  // fill the array with the actual value of the keys 
       for (var property in thisStateTopArray)  // for all the properties in the array; log the value of the names
       console.log(thisStateTopArray.name)  //log the value of the names and pass this value to the uri string below
-      var uri = 'https://api.songkick.com/api/3.0/events.json?apikey=QCFZoZJso4HKBsfS&artist_name=' + thisStateTopArray.name   + '&per_page=1'
+      var uri = 'https://api.songkick.com/api/3.0/events.json?apikey=APIKEY&artist_name=' + thisStateTopArray.name   + '&per_page=1'
      
      let re = new Request(uri, {
        method: 'GET',
@@ -225,7 +204,7 @@ getEvent() {
       var venue = thisStateEvent.city + thisStateEvent.event;
       var uri = 'https://maps.googleapis.com/maps/api/directions/json?origin=Huddersfield&destination=' + 
                  thisStateEvent.city + 
-                '&key=AIzaSyCcLX7jABYvI4YBQEQXzpGcNVlIYrGGvEQ&mode=transit&per_page=1'
+                '&key=APIKEY&mode=transit&per_page=1'
 
       let r = new Request(uri, {
         method: 'GET',
